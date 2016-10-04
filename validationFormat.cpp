@@ -57,3 +57,38 @@ bool validerPattern(const std::string& p_immatriculation, const std::string& p_c
 	return patternReconnu;
 
 };
+
+
+std::string appliquerTransformation(const std::string& p_vin,const std::string& p_transformationParChar)
+{
+	std::string vinTransforme;
+	char tableauOffset;
+
+	vinTransforme= "";
+	tableauOffset = 'A';
+
+
+	for(int i=0;i<p_vin.length();i++){
+		vinTransforme += p_transformationParChar[p_vin[i]-tableauOffset];
+	}
+
+	return vinTransforme;
+};
+
+
+int appliquerPoids(const std::string& p_vinTransforme,const std::string& p_tableauPoidsParPosition)
+{
+	int vinTransformeAggrege;
+	vinTransformeAggrege= 0;
+	char caractereOffset;
+	caractereOffset = '0';
+
+
+	for(int i=0;i<p_vinTransforme.length();i++){
+		std::cout << "increment: " << (int)p_tableauPoidsParPosition[i]-caractereOffset << " * " << (int)p_vinTransforme[i]-caractereOffset << " = " << (((int)p_tableauPoidsParPosition[i]-caractereOffset) * ((int)p_vinTransforme[i]-caractereOffset)) <<std::endl;
+		vinTransformeAggrege += (int)(p_tableauPoidsParPosition[i]-caractereOffset)*((int)p_vinTransforme[i]-caractereOffset);
+	}
+
+	return vinTransformeAggrege;
+
+};

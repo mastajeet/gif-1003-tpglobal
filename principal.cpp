@@ -4,7 +4,6 @@ using namespace std;
 
 int main() {
 
-	cout << validerImmatriculation("LOL 418")  << endl;
 	return 0;
 }
 
@@ -22,5 +21,10 @@ int main() {
  *
  * validerImmatriculation("Z45 KED") == true
  * validerImmatriculation("LOL 418") == true
+ *
+ *
+ *
+ * appliquerTransformation("ABCFF","1234567890") == 12366
+ * appliquerPoids("1234","1234") == 30
  *
  */

@@ -15,4 +15,8 @@ bool validerNiv(const std::string p_niv);
 
 bool validerPattern(const std::string& p_immatriculation, const std::string& p_caracteresMinimaux, const std::string& p_caracteresMaximaux);
 
+std::string appliquerTransformation(const std::string& p_vin,const std::string& p_tableauTransformationParChar);
+int appliquerPoids(const std::string& p_vin,const std::string& p_tableauPoidsParPosition);
+
+
 #endif /* VALIDATIONFORMAT_H_ */
