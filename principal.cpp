@@ -4,6 +4,7 @@ using namespace std;
 
 int main() {
 
+	cout << "NIV Valide: " << validerNiv("WA1DKBFP8BA015672")  << endl;
 	return 0;
 }
 
@@ -24,7 +25,18 @@ int main() {
  *
  *
  *
- * appliquerTransformation("ABCFF","1234567890") == 12366
+ * appliquerTransformation("ABC44FF","1234567890") == 1234466
  * appliquerPoids("1234","1234") == 30
  *
+ *
+ * validerNivContientExclusionGlobale("12345678901234567") == 0
+ * validerNivContientExclusionGlobale("OK123") == 1
+ *
+ *
+ * appliquerTransformationDesLettres("ABCDEFGHIJKLMNOPQRSTUVWXYZ","12345678012345070923456789") == 12345678012345070923456789
+ * validerNivContientErreurParPosition("123456787A") == 0
+ * validerNivContientErreurParPosition("12345678XA") == 0
+ * validerNivContientErreurParPosition("12345678XU") == 1
+ * validerNivContientErreurParPosition("12345678KA") == 1
+ * validerNivContientErreurParPosition("12345678KZ") == 1
  */

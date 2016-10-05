@@ -26,20 +26,144 @@ bool validerImmatriculation(const std::string& p_immatriculation)
 	return patternTrouve;
 };
 
-bool validerNiv(const std::string p_niv)
+bool validerNiv(const std::string& p_niv)
 {
-	return true;
+	bool nivValide = true;
+
+	if(nivValide && validerNivContientExclusionGlobale(p_niv))
+	{
+		nivValide = false;
+		std::cout << "le numero d'identification a un erreur au niveau global" << std::endl;
+	}
+
+	if(nivValide && validerNivContientErreurParPosition(p_niv))
+	{
+		nivValide = false;
+		std::cout << "Un position n'est pas correctement definie" << std::endl;
+
+	}
+
+	if(nivValide && !validerCoherenceNiv(p_niv))
+	{
+		nivValide = false;
+		std::cout << "Le numero de confirmation en position 9 n'est pas egal a celui attendu" << std::endl;
+	}
+
+
+	return nivValide;
 }
 
+bool validerCoherenceNiv(const std::string& p_niv)
+{
+	bool nivCoherent;
+	const int valeurOffset = '0';
+	const int valeurConfirmation = (int)(p_niv[8]-valeurOffset);
+
+	const std::string nivTransforme = appliquerTransformationDesLettres(p_niv,"12345678012345070923456789");
+	const int valeurAgregee = appliquerPoids(nivTransforme,"87654329098765432") + appliquerPoids(nivTransforme,"00000001000000000");
+	const int valeurTestConfirmation = modulo(valeurAgregee,11);
+	nivCoherent = (valeurTestConfirmation==valeurConfirmation) ; //appliquerTransformation()
+	return nivCoherent;
+}
+
+bool validerNivContientErreurParPosition(const std::string& p_niv)
+{
+	bool nivContientErreurParPosition = false;
+
+	//position 9 (index 8) qui est entre 0 et 9 ou X
+	if(!nivContientErreurParPosition &&
+			!(validerPattern(p_niv[8],'0','9') || validerPattern(p_niv[8],'X','X')))
+	{
+		nivContientErreurParPosition = true;
+		std::cout << "Le Niv ne contient pas 0-9 ou X a la 9e position" << std::endl;
+	}
+
+	//Position 10 qui ne peut pas etre U ou Z
+	if(!nivContientErreurParPosition &&
+			(validerPattern(p_niv[9],'U','U') || validerPattern(p_niv[9],'Z','Z')) )
+	{
+		nivContientErreurParPosition = true;
+		std::cout << "Le Niv contient un U ou un Z a la 10e position" << std::endl;
+	}
+
+	return nivContientErreurParPosition;
+}
+
+bool validerNivContientExclusionGlobale(const std::string& p_niv)
+{
+
+	bool nivContientExclusionGlobale = false;
+
+	// Doit contenir 17 characteres
+	if(!nivContientExclusionGlobale && p_niv.length() != 17){
+		nivContientExclusionGlobale = true;
+		std::cout << "le numero d'identification n'a pas 17 caracteres" << std::endl;
+	}
+
+	//doit etre chiffre ou lettres majuscules (alphanumerique)
+	if(!nivContientExclusionGlobale)
+	{
+		for(unsigned int i = 0; i < p_niv.length(); i++)
+		{
+			nivContientExclusionGlobale = nivContientExclusionGlobale || !(validerPattern(p_niv[i],'0','9') || validerPattern(p_niv[i],'A','Z')) ;
+
+		}
+		if(nivContientExclusionGlobale)
+		{
+			std::cout << "le numero d'identification n'est pas uniquement constitue de chiffre et de lettre majuscules" << std::endl;
+		}
+	}
+
+	// ne peut pas contenir I O ou Q
+	if(!nivContientExclusionGlobale)
+	{
+		for(unsigned int i = 0; i < p_niv.length(); i++)
+		{
+			nivContientExclusionGlobale = nivContientExclusionGlobale || validerPattern(p_niv[i],'I','I');
+			nivContientExclusionGlobale = nivContientExclusionGlobale || validerPattern(p_niv[i],'O','O');
+			nivContientExclusionGlobale = nivContientExclusionGlobale || validerPattern(p_niv[i],'Q','Q');
+
+		}
+		if(nivContientExclusionGlobale){
+			std::cout << "le numero d'identification contient les lettre I O ou Q" << std::endl;
+		}
+	}
+
+	// 5 derniere positions sont normalemnet numerique...juste lever un warning console
+	bool dernierCaracterereNumeriques = false;
+
+	for(unsigned int i = 11; i < p_niv.length(); i++)
+		{
+			dernierCaracterereNumeriques = dernierCaracterereNumeriques || validerPattern(p_niv[i],'0','9');
+		}
+		if(!dernierCaracterereNumeriques){
+			std::cout << "Attention: Les 5 derniers caracteres du NIV sont normalement numeriques, il se pourrait qu'il y ait une erreur" << std::endl;
+	}
+
+	return nivContientExclusionGlobale;
+}
+
+bool validerPattern(const char& p_caractere, const char& p_caractereMinimal, const char& p_caractereMaximal)
+{
+	bool patternReconnu;
+	patternReconnu = true;
+	if(!(p_caractere>=p_caractereMinimal && p_caractere<=p_caractereMaximal))
+	{
+		patternReconnu= false;
+	}
+	return patternReconnu;
+
+};
 
 bool validerPattern(const std::string& p_immatriculation, const std::string& p_caracteresMinimaux, const std::string& p_caracteresMaximaux)
 {
+	std::cout << "validerPattern - Debug" << std::endl;
 	bool patternReconnu;
 	patternReconnu = true;
 	if(p_caracteresMinimaux.length()==p_caracteresMaximaux.length())
 	{
 		std::cout << "Pattern a tester: " << p_caracteresMinimaux << std::endl;
-		for(int i=0; i<p_caracteresMinimaux.length(); i++){
+		for(unsigned int i=0; i < p_immatriculation.length(); i++){
 			const char valeurAsciiCaractere = p_immatriculation[i];
 			const char valeurAsciiMinimale = p_caracteresMinimaux[i];
 			const char valeurAsciiMaximale = p_caracteresMaximaux[i];
@@ -58,8 +182,7 @@ bool validerPattern(const std::string& p_immatriculation, const std::string& p_c
 
 };
 
-
-std::string appliquerTransformation(const std::string& p_vin,const std::string& p_transformationParChar)
+std::string appliquerTransformationDesLettres(const std::string& p_vin,const std::string& p_transformationParChar)
 {
 	std::string vinTransforme;
 	char tableauOffset;
@@ -68,13 +191,25 @@ std::string appliquerTransformation(const std::string& p_vin,const std::string& 
 	tableauOffset = 'A';
 
 
-	for(int i=0;i<p_vin.length();i++){
-		vinTransforme += p_transformationParChar[p_vin[i]-tableauOffset];
+	for(unsigned int i=0;i<p_vin.length();i++)
+	{
+		if(validerPattern(p_vin[i],'A','Z'))
+		{
+			vinTransforme += p_transformationParChar[p_vin[i]-tableauOffset];
+		}else{
+			vinTransforme += p_vin[i];
+		}
 	}
 
 	return vinTransforme;
 };
 
+int modulo(const int& p_nombreADiviser,const int& p_diviseur){
+
+	const int nombreDivisionComplete =  p_nombreADiviser / p_diviseur;
+	const int restantDivisionEntiere = p_nombreADiviser - nombreDivisionComplete * p_diviseur;
+	return restantDivisionEntiere;
+}
 
 int appliquerPoids(const std::string& p_vinTransforme,const std::string& p_tableauPoidsParPosition)
 {
@@ -83,8 +218,9 @@ int appliquerPoids(const std::string& p_vinTransforme,const std::string& p_table
 	char caractereOffset;
 	caractereOffset = '0';
 
+	std::cout << "appliquerPoids - Debug" << std::endl;
 
-	for(int i=0;i<p_vinTransforme.length();i++){
+	for(unsigned int i=0;i<p_vinTransforme.length();i++){
 		std::cout << "increment: " << (int)p_tableauPoidsParPosition[i]-caractereOffset << " * " << (int)p_vinTransforme[i]-caractereOffset << " = " << (((int)p_tableauPoidsParPosition[i]-caractereOffset) * ((int)p_vinTransforme[i]-caractereOffset)) <<std::endl;
 		vinTransformeAggrege += (int)(p_tableauPoidsParPosition[i]-caractereOffset)*((int)p_vinTransforme[i]-caractereOffset);
 	}
