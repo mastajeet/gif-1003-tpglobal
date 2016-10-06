@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-
+	cout << "Plaque Valide: " << validerImmatriculation("LOL 1k3")  << endl;
 	cout << "NIV Valide: " << validerNiv("WA1DKBFP8BA015672")  << endl;
 	return 0;
 }

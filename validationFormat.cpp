@@ -10,6 +10,10 @@
 #include <tr1/regex>
 #include <iostream>
 
+/**
+ * \brief fonction qui valide une plaque d'immatriculation
+ * \param[in] p_immatriculation une chaine de caractere a tester
+  */
 bool validerImmatriculation(const std::string& p_immatriculation)
 {
 	bool patternTrouve;
@@ -26,6 +30,10 @@ bool validerImmatriculation(const std::string& p_immatriculation)
 	return patternTrouve;
 };
 
+/**
+ * \brief fonction qui valide un numero d'identification d'un vehicule
+ * \param[in] p_niv une chaine de caractere a tester
+*/
 bool validerNiv(const std::string& p_niv)
 {
 	bool nivValide = true;
@@ -53,6 +61,11 @@ bool validerNiv(const std::string& p_niv)
 	return nivValide;
 }
 
+
+/**
+ * \brief fonction qui verifie si un numero d'identification a le bon numero de validation
+ * \param[in] p_niv une chaine de caractere contenant le numero de validation a tester
+*/
 bool validerCoherenceNiv(const std::string& p_niv)
 {
 	bool nivCoherent;
@@ -66,6 +79,10 @@ bool validerCoherenceNiv(const std::string& p_niv)
 	return nivCoherent;
 }
 
+/**
+ * \brief fonction qui retourne vrai si le numero d'identifaction contient une erreur pour un caractere a une position precise
+ * \param[in] p_niv une chaine de caractere contenant le numero de validation a tester
+*/
 bool validerNivContientErreurParPosition(const std::string& p_niv)
 {
 	bool nivContientErreurParPosition = false;
@@ -89,6 +106,10 @@ bool validerNivContientErreurParPosition(const std::string& p_niv)
 	return nivContientErreurParPosition;
 }
 
+/**
+ * \brief fonction qui retourne vrai si un numero d'identification contient une erreur globale (mauvaise longueur, caractere proscrit globalement...)
+ * \param[in] p_niv une chaine de caractere contenant le numero de validation a tester
+*/
 bool validerNivContientExclusionGlobale(const std::string& p_niv)
 {
 
@@ -143,6 +164,12 @@ bool validerNivContientExclusionGlobale(const std::string& p_niv)
 	return nivContientExclusionGlobale;
 }
 
+/**
+ * \brief fonction qui verifie un caractere est dans les bornes de deux arguments
+ * \param[in] p_caractere un caractere a tester
+ * \param[in] p_caractereMinimal un caractere qui est la borne inferieure incluse
+ * \param[in] p_caractereMaximal un caractere qui est la borne supperieure incluse
+*/
 bool validerPattern(const char& p_caractere, const char& p_caractereMinimal, const char& p_caractereMaximal)
 {
 	bool patternReconnu;
@@ -155,7 +182,13 @@ bool validerPattern(const char& p_caractere, const char& p_caractereMinimal, con
 
 };
 
-bool validerPattern(const std::string& p_immatriculation, const std::string& p_caracteresMinimaux, const std::string& p_caracteresMaximaux)
+/**
+ * \brief fonction qui verifie si une tous les caracteres d'une chaine de caracteres respectent les bornes inferieures et supperieur d'un pattern
+ * \param[in] p_chaineATester la chaine de caracteres a tester
+ * \param[in] p_caracteresMinimaux borne inferieur (incluse) pour les caracteres aux memes positions
+ * \param[in] p_caracteresMaximaux borne supperieure (incluse) pour les caracteres aux memes positions
+*/
+bool validerPattern(const std::string& p_chaineATester, const std::string& p_caracteresMinimaux, const std::string& p_caracteresMaximaux)
 {
 	std::cout << "validerPattern - Debug" << std::endl;
 	bool patternReconnu;
@@ -163,12 +196,12 @@ bool validerPattern(const std::string& p_immatriculation, const std::string& p_c
 	if(p_caracteresMinimaux.length()==p_caracteresMaximaux.length())
 	{
 		std::cout << "Pattern a tester: " << p_caracteresMinimaux << std::endl;
-		for(unsigned int i=0; i < p_immatriculation.length(); i++){
-			const char valeurAsciiCaractere = p_immatriculation[i];
+		for(unsigned int i=0; i < p_chaineATester.length(); i++){
+			const char valeurAsciiCaractere = p_chaineATester[i];
 			const char valeurAsciiMinimale = p_caracteresMinimaux[i];
 			const char valeurAsciiMaximale = p_caracteresMaximaux[i];
 			std::cout << "A tester: " << valeurAsciiCaractere <<", valeur minimale: "<< valeurAsciiMinimale <<", valeur maximale: "<< valeurAsciiMaximale << std::endl;
-			std::cout << valeurAsciiCaractere << " >= " << valeurAsciiMinimale <<": "<< (valeurAsciiCaractere >= valeurAsciiMinimale) << std::endl;
+			std::cout << valeurAsciiCaractere << " >= " << valeurAsciiMinimale <<": "<< (valeurAsciiCaractere >= valeurAsciiMinimale) << ", ";
 			std::cout << valeurAsciiCaractere << " <= " << valeurAsciiMaximale <<": "<< (valeurAsciiCaractere <= valeurAsciiMaximale) << std::endl;
 
 			if(!(valeurAsciiCaractere>=valeurAsciiMinimale && valeurAsciiCaractere<=valeurAsciiMaximale))
@@ -182,6 +215,12 @@ bool validerPattern(const std::string& p_immatriculation, const std::string& p_c
 
 };
 
+
+/**
+ * \brief fonction transforme chacune des lettres selon un pattern.
+ * \param[in] p_vin la chaine de caracteres a transformer
+ * \param[in] p_transformationParChar table de transformation des valeurs. la premiere position transforme les A, la deuxieme transforme les B, etc
+ */
 std::string appliquerTransformationDesLettres(const std::string& p_vin,const std::string& p_transformationParChar)
 {
 	std::string vinTransforme;
@@ -204,6 +243,11 @@ std::string appliquerTransformationDesLettres(const std::string& p_vin,const std
 	return vinTransforme;
 };
 
+/**
+ * \brief retourne le reste d'une division entiere
+ * \param[in] p_nombreADiviser le nombre a diviser
+ * \param[in] p_diviseur le nombre qui divise le nombre a diviser
+ */
 int modulo(const int& p_nombreADiviser,const int& p_diviseur){
 
 	const int nombreDivisionComplete =  p_nombreADiviser / p_diviseur;
@@ -211,6 +255,11 @@ int modulo(const int& p_nombreADiviser,const int& p_diviseur){
 	return restantDivisionEntiere;
 }
 
+/**
+ * \brief fonction applique des poids aux caracteres aux meme positions
+ * \param[in] p_vin la chaine de caracteres a ponderer
+ * \param[in] p_tableauPoidsParPosition vecteur de poids. la premiere position pondere la premiere position, la deuxieme pondere la deuxieme, etc
+ */
 int appliquerPoids(const std::string& p_vinTransforme,const std::string& p_tableauPoidsParPosition)
 {
 	int vinTransformeAggrege;
