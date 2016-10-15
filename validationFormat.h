@@ -18,6 +18,7 @@ bool validerPattern(const char& p_caractere, const char& p_caractereMinimal, con
 
 std::string appliquerTransformationDesLettres(const std::string& p_vin,const std::string& p_tableauTransformationParChar);
 int appliquerPoids(const std::string& p_vin,const std::string& p_tableauPoidsParPosition);
+int obtenirNumeroConfirmateur(const std::string& p_niv );
 bool validerNivContientExclusionGlobale(const std::string& p_niv);
 bool validerNivContientErreurParPosition(const std::string& p_niv);
 bool validerCoherenceNiv(const std::string& p_niv);

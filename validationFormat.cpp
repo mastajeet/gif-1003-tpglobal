@@ -69,14 +69,31 @@ bool validerNiv(const std::string& p_niv)
 bool validerCoherenceNiv(const std::string& p_niv)
 {
 	bool nivCoherent;
-	const int valeurOffset = '0';
-	const int valeurConfirmation = (int)(p_niv[8]-valeurOffset);
+	const int valeurConfirmation = obtenirNumeroConfirmateur(p_niv);
 
 	const std::string nivTransforme = appliquerTransformationDesLettres(p_niv,"12345678012345070923456789");
 	const int valeurAgregee = appliquerPoids(nivTransforme,"87654329098765432") + appliquerPoids(nivTransforme,"00000001000000000");
 	const int valeurTestConfirmation = modulo(valeurAgregee,11);
 	nivCoherent = (valeurTestConfirmation==valeurConfirmation) ; //appliquerTransformation()
 	return nivCoherent;
+}
+
+int obtenirNumeroConfirmateur(const std::string& p_niv)
+{
+	int valeurConfirmation;
+	const int valeurOffset = '0';
+	const char itemConfirmation = p_niv[8];
+
+	if(validerPattern(itemConfirmation,'0','9'))
+	{
+		valeurConfirmation = (int)(itemConfirmation-valeurOffset);
+	}
+	else if (validerPattern(itemConfirmation,'X','X'))
+	{
+		valeurConfirmation = 10;
+	}
+
+	return valeurConfirmation;
 }
 
 /**
