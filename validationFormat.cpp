@@ -22,12 +22,18 @@ namespace util
 
 		patternTrouve=false;
 
-		patternTrouve += validerPattern(p_immatriculation,"000 AAA","999 ZZZ");
-		patternTrouve += validerPattern(p_immatriculation,"000A000","999Z999");
-		patternTrouve += validerPattern(p_immatriculation,"A00 AAA","Z99 ZZZ");
-		patternTrouve += validerPattern(p_immatriculation,"AAA 000","ZZZ 999");
-		patternTrouve += validerPattern(p_immatriculation,"L000000","L999999");
-
+		if(p_immatriculation.length()==7)
+		{
+			patternTrouve += validerPattern(p_immatriculation,"000 AAA","999 ZZZ");
+			patternTrouve += validerPattern(p_immatriculation,"000A000","999Z999");
+			patternTrouve += validerPattern(p_immatriculation,"A00 AAA","Z99 ZZZ");
+			patternTrouve += validerPattern(p_immatriculation,"AAA 000","ZZZ 999");
+			patternTrouve += validerPattern(p_immatriculation,"L000000","L999999");
+		}
+		else
+		{
+			std::cout << "Le numero d'immatriculation n'a pas le nom nombre de characteres" << std::endl;
+		}
 
 		return patternTrouve;
 	};
@@ -209,19 +215,23 @@ namespace util
 	*/
 	bool validerPattern(const std::string& p_chaineATester, const std::string& p_caracteresMinimaux, const std::string& p_caracteresMaximaux)
 	{
-		std::cout << "validerPattern - Debug" << std::endl;
+		// std::cout << "validerPattern - Debug" << std::endl;
 		bool patternReconnu;
 		patternReconnu = true;
-		if(p_caracteresMinimaux.length()==p_caracteresMaximaux.length())
+		if(!(p_caracteresMinimaux.length()==p_caracteresMaximaux.length() and p_chaineATester.length()==p_caracteresMaximaux.length()))
 		{
-			std::cout << "Pattern a tester: " << p_caracteresMinimaux << std::endl;
+			patternReconnu = false;
+		}
+		else if(p_caracteresMinimaux.length()==p_caracteresMaximaux.length())
+		{
+		//	std::cout << "Pattern a tester: " << p_caracteresMinimaux << std::endl;
 			for(unsigned int i=0; i < p_chaineATester.length(); i++){
 				const char valeurAsciiCaractere = p_chaineATester[i];
 				const char valeurAsciiMinimale = p_caracteresMinimaux[i];
 				const char valeurAsciiMaximale = p_caracteresMaximaux[i];
-				std::cout << "A tester: " << valeurAsciiCaractere <<", valeur minimale: "<< valeurAsciiMinimale <<", valeur maximale: "<< valeurAsciiMaximale << std::endl;
-				std::cout << valeurAsciiCaractere << " >= " << valeurAsciiMinimale <<": "<< (valeurAsciiCaractere >= valeurAsciiMinimale) << ", ";
-				std::cout << valeurAsciiCaractere << " <= " << valeurAsciiMaximale <<": "<< (valeurAsciiCaractere <= valeurAsciiMaximale) << std::endl;
+				// std::cout << "A tester: " << valeurAsciiCaractere <<", valeur minimale: "<< valeurAsciiMinimale <<", valeur maximale: "<< valeurAsciiMaximale << std::endl;
+				// std::cout << valeurAsciiCaractere << " >= " << valeurAsciiMinimale <<": "<< (valeurAsciiCaractere >= valeurAsciiMinimale) << ", ";
+				// std::cout << valeurAsciiCaractere << " <= " << valeurAsciiMaximale <<": "<< (valeurAsciiCaractere <= valeurAsciiMaximale) << std::endl;
 
 				if(!(valeurAsciiCaractere>=valeurAsciiMinimale && valeurAsciiCaractere<=valeurAsciiMaximale))
 				{
@@ -286,10 +296,10 @@ namespace util
 		char caractereOffset;
 		caractereOffset = '0';
 
-		std::cout << "appliquerPoids - Debug" << std::endl;
+		//std::cout << "appliquerPoids - Debug" << std::endl;
 
 		for(unsigned int i=0;i<p_vinTransforme.length();i++){
-			std::cout << "increment: " << (int)p_tableauPoidsParPosition[i]-caractereOffset << " * " << (int)p_vinTransforme[i]-caractereOffset << " = " << (((int)p_tableauPoidsParPosition[i]-caractereOffset) * ((int)p_vinTransforme[i]-caractereOffset)) <<std::endl;
+		//	std::cout << "increment: " << (int)p_tableauPoidsParPosition[i]-caractereOffset << " * " << (int)p_vinTransforme[i]-caractereOffset << " = " << (((int)p_tableauPoidsParPosition[i]-caractereOffset) * ((int)p_vinTransforme[i]-caractereOffset)) <<std::endl;
 			vinTransformeAggrege += (int)(p_tableauPoidsParPosition[i]-caractereOffset)*((int)p_vinTransforme[i]-caractereOffset);
 		}
 
